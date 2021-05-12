@@ -37,7 +37,7 @@ GET /v1/lycees/
 Search for high school using parameters like `num_siret, code_postal, nom_etablissement and statut`. E.g. `GET /v1/lycees/search?num_siret=12345678`
            
 ```http
-GET /v1/lycees/q?search_field=searach_param
+GET /v1/lycees/q?{search_field=searach_param}
 ```
 
 #### High Schools in Postal Code
@@ -69,7 +69,7 @@ GET /v1/postaux/q?search_field=searach_param
 
 ## Installation
 
-Make sure you have [`python3.9`](https://docs.python-guide.org/starting/installation/) above installed and on your `PATH` before you continue to the next step.
+Make sure you have [`Python3.9`](https://docs.python-guide.org/starting/installation/) above installed and on your `PATH` before you continue to the next step.
 
 ```bash
 git clone https://github.com/mdauthentic/commune-api.git`
