@@ -6,21 +6,65 @@
 
 ## Data Sources
 
-The raw data is downloaded from [Data.gouv](https://data.gouv.fr) on the following links;
+The raw data is downloaded from [data.gouv](https://data.gouv.fr) on the following links;
 
 - [Lycees](https://www.data.gouv.fr/fr/datasets/lycees-donnees-generales/)
 - [Codes Postaux](https://www.data.gouv.fr/fr/datasets/codes-postaux/#_)
 
 ## Tech Stack
 
-- Python3.9
-- FastAPI
-- Unicorn
-- RethinkDB
+- `Python3.9`
+- `FastAPI`
+- `Unicorn`
+- `RethinkDB`
 
 ## API Endpoints
 
-Something
+The list of endpoints avaliable are as follows:
+
+### High Schools (Lycees)
+
+#### All High Schools Endpoint
+
+List all high schools in France (paginated at 100 per page)
+
+```http
+GET /v1/lycees/
+```
+
+#### Search
+
+Search for high school using parameters like `num_siret, code_postal, nom_etablissement and statut`. E.g. `GET /v1/lycees/search?num_siret=12345678`
+           
+```http
+GET /v1/lycees/q?search_field=searach_param
+```
+
+#### High Schools in Postal Code
+
+You can get the list of high schools in a given postal code using the endpoint below
+
+```http
+GET /v1/lycees/{code_postal}
+```
+
+### Postal Code (Codes Postaux)
+
+#### All Communities Endpoint
+
+List all communities in France (paginated at 100 per page)
+
+```http
+GET /v1/postaux/
+```
+
+#### Search
+
+Search for communities using parameters like `codePostal, nomCommune`. E.g. `GET /v1/postaux/search?codePostal=12345678`
+           
+```http
+GET /v1/postaux/q?search_field=searach_param
+```
 
 
 ## Installation
