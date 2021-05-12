@@ -11,7 +11,11 @@ TBL_NAME = "lycees"
 
 
 def api_request() -> List[Dict[str, Any]]:
-    """Request data from REST API endpoints"""
+    """Request data from REST API endpoints
+        Due to known issues @ https://github.com/rethinkdb/rethinkdb/issues/5521
+        it is important to first download the data and load into the db
+        instead of uploading using RethinkDB `r.http` function
+    """
     http = urllib3.PoolManager()
     get_url = (
         "https://www.data.gouv.fr/fr/datasets/r/7a0d991f-23c0-4021-a23a-b0c7f051c51d"
