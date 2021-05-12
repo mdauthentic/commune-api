@@ -1,6 +1,4 @@
-<h1 align="center">
-    Commune API
-</h1>
+# Commune API
 
 `Commune API` provides two categories of information, first one is about all high schools in France and the other is postal codes for all communities/cities in France and oversea territories.
 
@@ -66,6 +64,19 @@ Search for communities using parameters like `codePostal, nomCommune`. E.g. `GET
 GET /v1/postaux/q?search_field=searach_param
 ```
 
+## Documentation
+
+`FastAPI` comes with automatic documentation with SwaggerUI which can be accessed from
+
+```http
+GET /v1
+```
+
+The alternative documentation (redoc) is accessible from
+
+```http
+GET /
+```
 
 ## Installation
 
@@ -79,3 +90,8 @@ source my-env/bin/activate
 pip3 install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+## Credits
+
+- Data source: [data.gouv](https://data.gouv.fr)
+- [FastAPI](https://fastapi.tiangolo.com/)
