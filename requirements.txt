@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+rethinkdb
+urllib3
