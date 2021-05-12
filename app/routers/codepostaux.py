@@ -65,14 +65,3 @@ def search(db: Connection = Depends(dbinit.get_db),
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="You must provide a search parameter",
             )
-
-
-@router.get("/{codePostal}", response_model=List[postaux.CodesPostaux])
-def by_postal_code(codePostal: int, db: Connection = Depends(dbinit.get_db)):
-    search = tbl.filter(base.row["codePostal"] == f"{codePostal}").run(db)
-    if not search:
-        raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Invalid paramter: {codePostal}",
-            )
-    return list(search)
