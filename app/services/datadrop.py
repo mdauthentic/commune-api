@@ -10,40 +10,42 @@ DB_NAME = "test"
 TBL_NAME = "lycees"
 
 
-def api_request() -> List[Dict[str, Any]]:
+def api_request(data_url: str) -> List[Dict[str, Any]]:
     """Request data from REST API endpoints
-        Due to known issues @ https://github.com/rethinkdb/rethinkdb/issues/5521
-        it is important to first download the data and load into the db
-        instead of uploading using RethinkDB `r.http` function
+    Due to known issues @ https://github.com/rethinkdb/rethinkdb/issues/5521
+    it is important to first download the data and load into the db
+    instead of uploading using RethinkDB `r.http` function
     """
     http = urllib3.PoolManager()
-    get_url = (
-        "https://www.data.gouv.fr/fr/datasets/r/7a0d991f-23c0-4021-a23a-b0c7f051c51d"
-    )
 
-    logging.info(f"Attempting to get data {get_url}...")
+    logging.info(f"Attempting to get data {data_url}...")
     try:
         response = http.request(
             "GET",
-            get_url,
+            data_url,
             headers={"User-Agent": "Mozilla/5.0"},
             retries=urllib3.util.Retry(3),
         )
         data = json.loads(response.data.decode("utf8"))
     except HTTPError as err:
-        logging.error(f"HTTP error occured for {get_url}", err)
+        logging.error(f"HTTP error occured for {data_url}", err)
     except urllib3.exceptions.MaxRetryError as err:
-        logging.error(f"API unavailable at {get_url}", err)
+        logging.error(f"API unavailable at {data_url}", err)
 
-    results = [data[i]["fields"] for i in range(len(data))]
-
-    return results
+    return data
 
 
-def data_dump_db():
+def lycees_clean(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return [data[i]["fields"] for i in range(len(data))]
+
+
+def postal_codes(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return data
+
+
+def data_dump_db(json_result: List[Dict[str, Any]]) -> None:
     r = RethinkDB()
     logging.info(f"Establishing database connection...")
     with r.connect(db=DB_NAME) as conn:
-        json_result = api_request()
         r.table(TBL_NAME).insert(json_result).run(conn)
         logging.info(f"Data successfully imported into database")
