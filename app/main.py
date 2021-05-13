@@ -13,7 +13,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 def load_data():
-    datadrop.api_request()
+    # datadrop.api_request()
     pass
 
 @app.on_event("shutdown")
