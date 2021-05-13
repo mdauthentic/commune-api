@@ -66,7 +66,7 @@ GET /v1/postaux/q?search_field=searach_param
 
 ## Documentation
 
-`FastAPI` comes with automatic documentation with SwaggerUI which can be accessed from
+`FastAPI` comes with automatic documentation with OpenAPI UI which can be accessed from
 
 ```http
 GET /v1
