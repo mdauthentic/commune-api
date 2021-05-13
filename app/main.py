@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers import lycees, codepostaux
+from services import datadrop
 
 
 app = FastAPI(
@@ -8,6 +9,16 @@ app = FastAPI(
     redoc_url="/", 
     version="v1.0"
 )
+
+
+@app.on_event("startup")
+def load_data():
+    datadrop.api_request()
+    pass
+
+@app.on_event("shutdown")
+def destroy_session():
+    pass
 
 
 app.include_router(lycees.router)
