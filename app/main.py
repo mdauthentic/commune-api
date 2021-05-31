@@ -13,8 +13,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 def load_data():
-    # datadrop.api_request()
-    pass
+    datadrop.api_request()
 
 @app.on_event("shutdown")
 def destroy_session():
