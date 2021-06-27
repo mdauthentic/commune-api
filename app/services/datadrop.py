@@ -4,10 +4,7 @@ from rethinkdb import RethinkDB
 import urllib3
 import json
 from urllib3.exceptions import HTTPError
-
-
-DB_NAME = "test"
-TBL_NAME = "lycees"
+from ..config import parse_config
 
 
 def api_request(data_url: str) -> List[Dict[str, Any]]:
@@ -35,17 +32,35 @@ def api_request(data_url: str) -> List[Dict[str, Any]]:
     return data
 
 
-def lycees_clean(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return [data[i]["fields"] for i in range(len(data))]
+def db_startup():
+    config = parse_config()
+    db_name = config["rethinkdb"]["db"]
+    db_port = config["rethinkdb"]["port"]
+    tbl_list = [config["lycees"]["table"], config["postaux"]["table"]]
 
-
-def postal_codes(data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return data
-
-
-def data_dump_db(json_result: List[Dict[str, Any]]) -> None:
     r = RethinkDB()
+
     logging.info(f"Establishing database connection...")
-    with r.connect(db=DB_NAME) as conn:
-        r.table(TBL_NAME).insert(json_result).run(conn)
-        logging.info(f"Data successfully imported into database")
+    with r.connect(host="db", port=db_port) as conn:
+        if db_name not in r.db_list().run(conn):
+            r.db_create(db_name).run(conn)
+            logging.info(f"{db_name} database created...")
+
+        for tbl in tbl_list:
+            if tbl not in r.table_list().run(conn):
+                r.table_create(tbl).run(conn)
+                logging.info(f"{tbl} table created")
+    
+    logging.info("Database initialized.")
+
+
+def json_to_db(json_result: List[Dict[str, Any]], tbl_name: str) -> None:
+    """Insert documents into database table"""
+    config = parse_config()
+    db_name = config["rethinkdb"]["db"]
+    db_port = config["rethinkdb"]["port"]
+
+    r = RethinkDB()
+    with r.connect(host="db", port=db_port, db=db_name) as conn:
+        r.table(tbl_name).insert(json_result).run(conn, durability="soft")
+
