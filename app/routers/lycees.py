@@ -3,8 +3,8 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from rethinkdb import RethinkDB
 from rethinkdb.net import Connection
 from rethinkdb.ast import Table
-from database import db as dbinit
-from schemas import lycees
+from ..database import db as dbinit
+from ..schemas import lycees
 
 
 router = APIRouter(prefix="/v1/lycees", tags=["Lycees"])
@@ -16,8 +16,7 @@ tbl: Table = base.db(dbinit.LYCEES_DB).table(dbinit.TABLE_NAME_LYCEES)
 @router.get("/", response_model=List[lycees.LyceeBase])
 def all(db: Connection = Depends(dbinit.get_db), skip: int = 0, limit: int = 100):
     search = tbl.run(db)
-    result_list = list(search)[skip : skip + limit]
-    return result_list
+    return list(search)[skip : skip + limit]
 
 
 @router.get("/q", response_model=List[lycees.LyceeBase])
