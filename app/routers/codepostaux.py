@@ -3,8 +3,8 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from rethinkdb import RethinkDB
 from rethinkdb.net import Connection
 from rethinkdb.ast import Table
-from database import db as dbinit
-from schemas import postaux
+from ..database import db as dbinit
+from ..schemas import postaux
 
 
 router = APIRouter(prefix="/v1/postaux", tags=["Codes Postaux"])
