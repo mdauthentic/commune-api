@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+    web:
+        build: ./
+        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+        ports:
+            - 8000:8000
+        depends_on: 
+            - db
+    db:
+      image: rethinkdb:latest
+      platform: linux/x86_64
+      ports:
+        - '8080:8080'
+        - '29015:29015'
+        - '28015:28015'
+
+
