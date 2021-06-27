@@ -50,7 +50,7 @@ def db_startup():
             if tbl not in r.table_list().run(conn):
                 r.table_create(tbl).run(conn)
                 logging.info(f"{tbl} table created")
-    
+
     logging.info("Database initialized.")
 
 
@@ -64,3 +64,20 @@ def json_to_db(json_result: List[Dict[str, Any]], tbl_name: str) -> None:
     with r.connect(host="db", port=db_port, db=db_name) as conn:
         r.table(tbl_name).insert(json_result).run(conn, durability="soft")
 
+
+def postaux_load_tbl() -> None:
+    """Requests postal code data using the url in the configuration.
+    Then sends the data to be inserted into the database table"""
+    postaux = parse_config()["postaux"]
+    dataset_url = postaux["data"]
+    tbl_name = postaux["table"]
+    json_to_db(api_request(dataset_url), tbl_name)
+
+
+def lycees_load_tbl() -> None:
+    """Requests Lycees data using the url in the configuration.
+    Then sends the data to be inserted into the database table"""
+    lycee = parse_config()["lycees"]
+    dataset_url = lycee["data"]
+    tbl_name = lycee["table"]
+    json_to_db(api_request(dataset_url), tbl_name)
