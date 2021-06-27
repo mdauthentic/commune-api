@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routers import lycees, codepostaux
-from services import datadrop
+from .routers import lycees, codepostaux
+from .services import datadrop
 
 
 app = FastAPI(
