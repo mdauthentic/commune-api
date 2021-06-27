@@ -1,15 +1,13 @@
-import configparser
 from rethinkdb import RethinkDB
+from ..config import parse_config
 
-config = configparser.ConfigParser()
-config.read("../db.ini")
 
 # rethink config
-RDB_HOST = config["rethinkdb"]["host"]
-RDB_PORT = config["rethinkdb"]["port"]
-LYCEES_DB = config["rethinkdb"]["db"]
-TABLE_NAME_LYCEES = config["lycees"]["table"]
-TABLE_NAME_POSTAUX = config["postaux"]["table"]
+RDB_HOST = "db"
+RDB_PORT = parse_config()["rethinkdb"]["port"]
+LYCEES_DB = parse_config()["rethinkdb"]["db"]
+TABLE_NAME_LYCEES = parse_config()["lycees"]["table"]
+TABLE_NAME_POSTAUX = parse_config()["postaux"]["table"]
 
 r = RethinkDB()
 connect_db = r.connect(host=RDB_HOST, port=RDB_PORT)
