@@ -3,7 +3,7 @@ import logging
 from rethinkdb import RethinkDB
 import urllib3
 import json
-from urllib3.exceptions import HTTPError
+from urllib3.exceptions import MaxRetryError
 from ..config import parse_config
 
 
@@ -24,9 +24,7 @@ def api_request(data_url: str) -> List[Dict[str, Any]]:
             retries=urllib3.util.Retry(3),
         )
         data = json.loads(response.data.decode("utf8"))
-    except HTTPError as err:
-        logging.error(f"HTTP error occured for {data_url}", err)
-    except urllib3.exceptions.MaxRetryError as err:
+    except MaxRetryError as err:
         logging.error(f"API unavailable at {data_url}", err)
 
     return data
